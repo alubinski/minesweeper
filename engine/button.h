@@ -14,7 +14,7 @@ public:
     setColor(Config::BUTTON_COLOR);
   }
 
-  virtual void handleEvents(const SDL_Event &e) {
+  virtual void handleEvent(const SDL_Event &e) {
     if (isDisabled_)
       return;
     if (e.type == SDL_MOUSEMOTION) {
