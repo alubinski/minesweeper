@@ -2,6 +2,7 @@
 #define CELL_H
 
 #include "engine/button.h"
+#include "engine/image.h"
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_surface.h>
 
@@ -22,6 +23,13 @@ public:
     return col_;
   }
 
+  bool placeBomb();
+
+  [[nodiscard]]
+  bool hasBomb() const {
+    return hasBomb_;
+  }
+
 protected:
   void handleLeftClick() override;
 
@@ -31,6 +39,8 @@ private:
   bool isCleared_{false};
   int row_;
   int col_;
+  bool hasBomb_{false};
+  Engine::Image bombImage_;
 };
 
 #endif // CELL_H

@@ -6,6 +6,7 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_surface.h>
 #include <string>
+#include <unistd.h>
 
 namespace Engine {
 class Image {
@@ -21,7 +22,26 @@ public:
   }
 
   void render(SDL_Surface *surface) {
-    SDL_LowerBlitScaled(imageSurface_, nullptr, surface, &destination_);
+    SDL_BlitScaled(imageSurface_, nullptr, surface, &destination_);
+  }
+
+  Image(const Image &) = delete;
+  Image &operator=(const Image &) = delete;
+
+  Image(Image &&other) noexcept
+      : imageSurface_{other.imageSurface_}, destination_{other.destination_} {
+    other.imageSurface_ = nullptr;
+  }
+
+  Image &operator=(Image &&other) noexcept {
+    if (this != &other) {
+      if (imageSurface_)
+        SDL_FreeSurface(imageSurface_);
+      imageSurface_ = other.imageSurface_;
+      destination_ = other.destination_;
+      other.imageSurface_ = nullptr;
+    }
+    return *this;
   }
 
   ~Image() {

@@ -29,4 +29,5 @@ add_custom_command(TARGET Minesweeper POST_BUILD COMMAND ${CMAKE_COMMAND} -E cop
     "${AssetsDir}/flag.png"
     "${AssetsDir}/bomb.png"
     $<TARGET_FILE_DIR:Minesweeper>
+    VERBATIM
 )

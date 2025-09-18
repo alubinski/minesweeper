@@ -1,6 +1,7 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+#include <SDL2/SDL_stdinc.h>
 #define SHOW_DEBUG_INFO
 
 #include <SDL2/SDL.h>
@@ -9,13 +10,15 @@
 
 namespace UserEvents {
 inline Uint32 CELL_CLEARED = SDL_RegisterEvents(1);
-}
+inline Uint32 BOMB_PLACED = SDL_RegisterEvents(1);
+} // namespace UserEvents
 
 namespace Config {
 // Game Settings
 inline const std::string GAME_NAME{"Minesweeper"};
 inline constexpr int GRID_COLUMNS{8};
 inline constexpr int GRID_ROWS{4};
+inline constexpr int BOMB_COUNT{6};
 
 // Size and Positioning
 inline constexpr int PADDING{5};
@@ -37,6 +40,11 @@ inline constexpr SDL_Color BUTTON_CLEARED_COLOR{240, 240, 240, 255};
 
 // Asset Paths
 inline const std::string FONT{"Rubik-SemiBold.ttf"};
+inline const std::string BOMB_IMAGE{
+    "/home/alubinski/dev/minesweeper/build/bomb.png"};
+
+static_assert(BOMB_COUNT < GRID_COLUMNS * GRID_ROWS,
+              "Bomb count must be less than total cells");
 } // namespace Config
 
 namespace Utils {

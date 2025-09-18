@@ -1,8 +1,10 @@
 #ifndef GRID_H
 #define GRID_H
 
+#include "engine/random.h"
 #include "globals.h"
 #include "minesweeper/cell.h"
+#include <SDL2/SDL.h>
 #include <vector>
 
 class MineSweeperGrid {
@@ -18,6 +20,7 @@ public:
                               row, col);
       }
     }
+    placeBombs();
   }
 
   void render(SDL_Surface *surface) {
@@ -33,6 +36,17 @@ public:
   }
 
   std::vector<MineSweeperCell> children;
+
+private:
+  void placeBombs() {
+    int bombtoPlace{Config::BOMB_COUNT};
+    while (bombtoPlace > 0) {
+      const size_t randomIndex{Engine::Random::Int(0, children.size() - 1)};
+      if (children[randomIndex].placeBomb()) {
+        --bombtoPlace;
+      }
+    }
+  }
 };
 
 #endif // !GRID_H
