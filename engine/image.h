@@ -12,27 +12,27 @@ class Image {
 public:
   Image(int x, int y, int w, int h, const std::string &filename,
         int padding = 12)
-      : m_destination{x + padding / 2, y + padding / 2, w - padding,
-                      h - padding} {
-    m_imageSurface = IMG_Load(filename.c_str());
+      : destination_{x + padding / 2, y + padding / 2, w - padding,
+                     h - padding} {
+    imageSurface_ = IMG_Load(filename.c_str());
 #ifdef SHOW_DEBUG_INFO
     Utils::checkSDLError("IMG_Load");
 #endif
   }
 
   void render(SDL_Surface *surface) {
-    SDL_LowerBlitScaled(m_imageSurface, nullptr, surface, &m_destination);
+    SDL_LowerBlitScaled(imageSurface_, nullptr, surface, &destination_);
   }
 
   ~Image() {
-    if (m_imageSurface) {
-      SDL_FreeSurface(m_imageSurface);
+    if (imageSurface_) {
+      SDL_FreeSurface(imageSurface_);
     }
   }
 
 private:
-  SDL_Surface *m_imageSurface{nullptr};
-  SDL_Rect m_destination{0, 0, 0, 0};
+  SDL_Surface *imageSurface_{nullptr};
+  SDL_Rect destination_{0, 0, 0, 0};
 };
 } // namespace Engine
 

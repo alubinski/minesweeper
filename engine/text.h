@@ -14,54 +14,54 @@ class Text {
 public:
   Text(int x, int y, int w, int h, const std::string &content,
        SDL_Color color = {0, 0, 0, 255}, int fontSize = 30)
-      : m_destinationRect{x, y, w, h}, m_color{color} {
-    m_font = TTF_OpenFont(Config::c_font.c_str(), fontSize);
+      : destinationRect_{x, y, w, h}, color_{color} {
+    font_ = TTF_OpenFont(Config::FONT.c_str(), fontSize);
 #ifdef SHOW_DEBUG_INFO
     Utils::checkSDLError("TTF_OpenFont");
 #endif
     setText(content);
   }
 
-  void setText(const std::string &text) { setText(text, m_color); }
+  void setText(const std::string &text) { setText(text, color_); }
 
   void setText(const std::string &text, SDL_Color newColor) {
-    if (m_textSurface) {
-      SDL_FreeSurface(m_textSurface);
+    if (textSurface_) {
+      SDL_FreeSurface(textSurface_);
     }
-    m_color = newColor;
+    color_ = newColor;
 
-    m_textSurface = TTF_RenderUTF8_Blended(m_font, text.c_str(), m_color);
+    textSurface_ = TTF_RenderUTF8_Blended(font_, text.c_str(), color_);
 
-    auto [x, y, w, h] = m_destinationRect;
+    auto [x, y, w, h] = destinationRect_;
 
     // horrizontally centering
-    const int widthDifference{w - m_textSurface->w};
+    const int widthDifference{w - textSurface_->w};
     const int leftOffset{widthDifference / 2};
 
     // vertically centering
-    const int heightDifference{h - m_textSurface->h};
+    const int heightDifference{h - textSurface_->h};
     const int topOffset{heightDifference / 2};
 
-    m_textPosition = {x + leftOffset, y + topOffset, w, h};
+    textPosition_ = {x + leftOffset, y + topOffset, w, h};
   }
 
   void render(SDL_Surface *surface) {
-    SDL_BlitSurface(m_textSurface, nullptr, surface, &m_textPosition);
+    SDL_BlitSurface(textSurface_, nullptr, surface, &textPosition_);
   }
 
   ~Text() {
-    if (m_font)
-      TTF_CloseFont(m_font);
-    if (m_textSurface)
-      SDL_FreeSurface(m_textSurface);
+    if (font_)
+      TTF_CloseFont(font_);
+    if (textSurface_)
+      SDL_FreeSurface(textSurface_);
   }
 
 private:
-  SDL_Surface *m_textSurface{nullptr};
-  TTF_Font *m_font{nullptr};
-  SDL_Rect m_destinationRect{0, 0, 0, 0};
-  SDL_Rect m_textPosition{0, 0, 0, 0};
-  SDL_Color m_color{0, 0, 0, 255};
+  SDL_Surface *textSurface_{nullptr};
+  TTF_Font *font_{nullptr};
+  SDL_Rect destinationRect_{0, 0, 0, 0};
+  SDL_Rect textPosition_{0, 0, 0, 0};
+  SDL_Color color_{0, 0, 0, 255};
 };
 
 } // namespace Engine

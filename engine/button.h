@@ -11,11 +11,11 @@ namespace Engine {
 class Button : public Rectangle {
 public:
   Button(int x, int y, int w, int h) : Rectangle(x, y, w, h) {
-    setColor(Config::c_buttonColor);
+    setColor(Config::BUTTON_COLOR);
   }
 
   virtual void handleEvents(const SDL_Event &e) {
-    if (m_isDisabled)
+    if (isDisabled_)
       return;
     if (e.type == SDL_MOUSEMOTION) {
       handleMouseMotion(e.motion);
@@ -27,7 +27,7 @@ public:
     }
   }
 
-  void setIsDisabled(bool newValue) { m_isDisabled = newValue; }
+  void setIsDisabled(bool newValue) { isDisabled_ = newValue; }
 
 protected:
   virtual void handleLeftClick() {}
@@ -35,14 +35,14 @@ protected:
 
   virtual void handleMouseMotion(const SDL_MouseMotionEvent &e) {
     if (isWithinBounds(e.x, e.y)) {
-      setColor(Config::c_buttonHoverColor);
+      setColor(Config::BUTTON_HOVER_COLOR);
     } else {
-      setColor(Config::c_buttonColor);
+      setColor(Config::BUTTON_COLOR);
     }
   }
 
 private:
-  bool m_isDisabled{false};
+  bool isDisabled_{false};
 };
 } // namespace Engine
 

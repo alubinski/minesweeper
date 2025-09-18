@@ -6,33 +6,32 @@
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_video.h>
-#include <fstream>
 
 namespace Engine {
 
 class Window {
 public:
   Window() {
-    m_SDLWindow =
-        SDL_CreateWindow(Config::c_gameName.c_str(), SDL_WINDOWPOS_UNDEFINED,
-                         SDL_WINDOWPOS_UNDEFINED, Config::c_windowWidth,
-                         Config::c_windowHeight, 0);
+    SDLWindow_ =
+        SDL_CreateWindow(Config::GAME_NAME.c_str(), SDL_WINDOWPOS_UNDEFINED,
+                         SDL_WINDOWPOS_UNDEFINED, Config::WINDOW_WIDTH,
+                         Config::WINDOW_HEIGHT, 0);
   }
 
   void render() {
     SDL_FillRect(surface(), nullptr,
-                 SDL_MapRGB(surface()->format, Config::c_backgroundColor.r,
-                            Config::c_backgroundColor.g,
-                            Config::c_backgroundColor.b));
+                 SDL_MapRGB(surface()->format, Config::BACKGROUND_COLOR.r,
+                            Config::BACKGROUND_COLOR.g,
+                            Config::BACKGROUND_COLOR.b));
   }
 
-  void update() { SDL_UpdateWindowSurface(m_SDLWindow); }
+  void update() { SDL_UpdateWindowSurface(SDLWindow_); }
 
-  SDL_Surface *surface() { return SDL_GetWindowSurface(m_SDLWindow); }
+  SDL_Surface *surface() { return SDL_GetWindowSurface(SDLWindow_); }
 
   ~Window() {
-    if (m_SDLWindow && SDL_WasInit(SDL_INIT_VIDEO)) {
-      SDL_DestroyWindow(m_SDLWindow);
+    if (SDLWindow_ && SDL_WasInit(SDL_INIT_VIDEO)) {
+      SDL_DestroyWindow(SDLWindow_);
     }
   }
 
@@ -40,7 +39,7 @@ public:
   Window &operator=(const Window &) = delete;
 
 private:
-  SDL_Window *m_SDLWindow{nullptr};
+  SDL_Window *SDLWindow_{nullptr};
 };
 
 } // namespace Engine
