@@ -1,16 +1,27 @@
 #ifndef UI_H
 #define UI_H
 
+#include "globals.h"
 #include "minesweeper/grid.h"
+#include "minesweeper/new_game_button.h"
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_surface.h>
 class MinesweeperUI {
 public:
-  void render(SDL_Surface *surface) { grid.render(surface); }
-  void handleEvent(const SDL_Event &e) { grid.handleEvent(e); }
+  void render(SDL_Surface *surface) {
+    grid_.render(surface);
+    newGameButton_.render(surface);
+  }
+  void handleEvent(const SDL_Event &e) {
+    grid_.handleEvent(e), newGameButton_.handleEvent(e);
+  }
 
 private:
-  MineSweeperGrid grid{Config::PADDING, Config::PADDING};
+  MineSweeperGrid grid_{Config::PADDING, Config::PADDING};
+  NewGameButton newGameButton_{Config::PADDING,
+                               Config::GRID_HEIGHT + Config::PADDING * 2,
+                               Config::WINDOW_WIDTH - Config::PADDING * 2,
+                               Config::FOOTER_HEIGHT - Config::PADDING};
 };
 
 #endif

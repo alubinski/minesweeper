@@ -12,6 +12,9 @@
 namespace UserEvents {
 inline Uint32 CELL_CLEARED = SDL_RegisterEvents(1);
 inline Uint32 BOMB_PLACED = SDL_RegisterEvents(1);
+inline Uint32 GAME_WON = SDL_RegisterEvents(1);
+inline Uint32 GAME_LOST = SDL_RegisterEvents(1);
+inline Uint32 NEW_GAME = SDL_RegisterEvents(1);
 } // namespace UserEvents
 
 namespace Config {
@@ -30,7 +33,8 @@ inline constexpr int GRID_HEIGHT{GRID_ROWS * CELL_SIZE +
 inline constexpr int GRID_WIDTH{GRID_COLUMNS * CELL_SIZE +
                                 (GRID_COLUMNS - 1) * PADDING};
 
-inline constexpr int WINDOW_HEIGHT{GRID_HEIGHT + 2 * PADDING};
+inline constexpr int FOOTER_HEIGHT{60};
+inline constexpr int WINDOW_HEIGHT{GRID_HEIGHT + FOOTER_HEIGHT + 2 * PADDING};
 inline constexpr int WINDOW_WIDTH{GRID_WIDTH + 2 * PADDING};
 
 // Colors
@@ -38,6 +42,8 @@ inline constexpr SDL_Color BACKGROUND_COLOR{170, 170, 170, 255};
 inline constexpr SDL_Color BUTTON_COLOR{200, 200, 200, 255};
 inline constexpr SDL_Color BUTTON_HOVER_COLOR{170, 170, 170, 255};
 inline constexpr SDL_Color BUTTON_CLEARED_COLOR{240, 240, 240, 255};
+inline constexpr SDL_Color BUTTON_SUCCESS_COLOR{210, 235, 210, 255};
+inline constexpr SDL_Color BUTTON_FAILURE_COLOR{235, 210, 210, 255};
 inline const std::vector<SDL_Color> TEXT_COLORS{
     /* 0 */ {0, 0, 0, 255}, // Unused
     /* 1 */ {0, 1, 249, 255},

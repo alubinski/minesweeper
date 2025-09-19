@@ -31,6 +31,8 @@ public:
     return hasBomb_;
   }
 
+  void reset();
+
 protected:
   void handleLeftClick() override;
 
