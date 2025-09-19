@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL_stdinc.h>
 #include <vector>
-#define SHOW_DEBUG_INFO
+// #define SHOW_DEBUG_INFO
 
 #include <SDL2/SDL.h>
 #include <iostream>
