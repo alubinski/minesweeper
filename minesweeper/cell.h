@@ -3,6 +3,7 @@
 
 #include "engine/button.h"
 #include "engine/image.h"
+#include "engine/text.h"
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_surface.h>
 
@@ -36,11 +37,16 @@ protected:
 private:
   void clearCell();
   void reportEvent(uint32_t eventType);
+  bool isAdjacent(MineSweeperCell *other) const;
+  void hableBombPlaced(const SDL_UserEvent &event);
+  void handleCellCleared(const SDL_UserEvent &event);
   bool isCleared_{false};
   int row_;
   int col_;
   bool hasBomb_{false};
+  int adjacentBombs_{0};
   Engine::Image bombImage_;
+  Engine::Text text_;
 };
 
 #endif // CELL_H

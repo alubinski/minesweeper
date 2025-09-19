@@ -22,6 +22,32 @@ public:
     setText(content);
   }
 
+  Text(const Text &) = delete;
+  Text &operator=(const Text &) = delete;
+
+  Text(Text &&other) noexcept
+      : destinationRect_{other.destinationRect_}, color_{other.color_},
+        textSurface_{other.textSurface_}, font_{other.font_} {
+    other.textSurface_ = nullptr;
+    other.font_ = nullptr;
+  }
+
+  Text &operator=(Text &&other) noexcept {
+    if (this != &other) {
+      if (textSurface_)
+        SDL_FreeSurface(textSurface_);
+      if (font_)
+        TTF_CloseFont(font_);
+      textSurface_ = other.textSurface_;
+      font_ = other.font_;
+      destinationRect_ = other.destinationRect_;
+      color_ = other.color_;
+      other.textSurface_ = nullptr;
+      other.font_ = nullptr;
+    }
+    return *this;
+  }
+
   void setText(const std::string &text) { setText(text, color_); }
 
   void setText(const std::string &text, SDL_Color newColor) {

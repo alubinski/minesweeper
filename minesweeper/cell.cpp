@@ -1,16 +1,23 @@
 #include "cell.h"
 #include "globals.h"
 #include <cstdint>
+#include <string>
 
 MineSweeperCell::MineSweeperCell(int x, int y, int w, int h, int row, int col)
     : Button{x, y, w, h}, row_{row}, col_{col},
-      bombImage_{x, y, w, h, Config::BOMB_IMAGE} {};
+      bombImage_{x, y, w, h, Config::BOMB_IMAGE},
+      text_{x,
+            y,
+            w,
+            h,
+            std::to_string(adjacentBombs_),
+            Config::TEXT_COLORS[adjacentBombs_]} {};
 
 void MineSweeperCell::handleEvent(const SDL_Event &event) {
   if (event.type == UserEvents::CELL_CLEARED) {
-    std::cout << "A cell was cleared!" << std::endl;
+    handleCellCleared(event.user);
   } else if (event.type == UserEvents::BOMB_PLACED) {
-    std::cout << "A bomb was placed!" << std::endl;
+    hableBombPlaced(event.user);
   }
   Button::handleEvent(event);
 }
@@ -19,6 +26,8 @@ void MineSweeperCell::render(SDL_Surface *surface) {
   Button::render(surface);
   if (isCleared_ && hasBomb_) {
     bombImage_.render(surface);
+  } else if (isCleared_ && adjacentBombs_ > 0) {
+    text_.render(surface);
   }
 #ifdef SHOW_DEBUG_INFO
   else if (hasBomb_) {
@@ -52,4 +61,29 @@ bool MineSweeperCell::placeBomb() {
   hasBomb_ = true;
   reportEvent(UserEvents::BOMB_PLACED);
   return true;
+}
+
+bool MineSweeperCell::isAdjacent(MineSweeperCell *other) const {
+  return !(other == this) && std::abs(getRow() - other->getRow()) <= 1 &&
+         std::abs(getCol() - other->getCol()) <= 1;
+}
+
+void MineSweeperCell::hableBombPlaced(const SDL_UserEvent &event) {
+  auto *other = static_cast<MineSweeperCell *>(event.data1);
+  if (isAdjacent(other)) {
+    ++adjacentBombs_;
+    text_.setText(std::to_string(adjacentBombs_),
+                  Config::TEXT_COLORS[adjacentBombs_]);
+  }
+}
+
+void MineSweeperCell::handleCellCleared(const SDL_UserEvent &event) {
+  auto *other = static_cast<MineSweeperCell *>(event.data1);
+
+  if (other->hasBomb())
+    return;
+
+  if (isAdjacent(other) && other->adjacentBombs_ == 0) {
+    clearCell();
+  }
 }
