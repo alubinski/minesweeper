@@ -35,6 +35,7 @@ public:
 
 protected:
   void handleLeftClick() override;
+  void handleRightClick() override;
 
 private:
   void clearCell();
@@ -47,7 +48,9 @@ private:
   int col_;
   bool hasBomb_{false};
   int adjacentBombs_{0};
+  bool hasFlag_{false};
   Engine::Image bombImage_;
+  Engine::Image flagImage_;
   Engine::Text text_;
 };
 
